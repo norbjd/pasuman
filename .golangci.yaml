@@ -1,0 +1,32 @@
+# unfortunately, go 1.18 does not support all linters for now,
+# so we run the linter for go 1.17
+# see https://github.com/golangci/golangci-lint/issues/2649
+run:
+  go: '1.17'
+
+linters:
+  enable-all: true
+  disable:
+    - cyclop
+    - exhaustruct
+    - exhaustivestruct
+    - forbidigo
+    - gochecknoglobals
+    - paralleltest
+    - testpackage
+    - varnamelen
+    - wrapcheck
+
+linters-settings:
+  tagliatelle:
+    case:
+      use-field-name: true
+      rules:
+        json: snake
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - funlen
+  

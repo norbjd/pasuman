@@ -1,0 +1,70 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '^1.18.3'
+
+      - name: Build for all platforms
+        run: |
+          make build_all_platforms
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: pasuman-build-artifacts
+          path: pasuman-*
+
+  create_release:
+    runs-on: ubuntu-20.04
+
+    needs: build
+
+    outputs:
+      release_upload_url: ${{ steps.create_release.outputs.upload_url }}
+
+    steps:
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+
+  upload_release_assets:
+    runs-on: ubuntu-20.04
+
+    needs: create_release
+
+    strategy:
+      matrix:
+        output: [linux-amd64, darwin-amd64, darwin-arm64]
+    
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: pasuman-build-artifacts
+
+      - name: Upload release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.release_upload_url }}
+          asset_path: ./pasuman-${{ matrix.output }}
+          asset_name: pasuman-${{ matrix.output }}
+          asset_content_type: application/octet-stream

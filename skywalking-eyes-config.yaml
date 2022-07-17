@@ -1,0 +1,30 @@
+header:
+  license:
+    spdx-id: GPL-3.0-only
+    copyright-owner: norbjd
+    content: |
+      This file is part of pasuman (https://github.com/norbjd/pasuman).
+     
+      pasuman is a command-line password manager.
+      Copyright (C) 2022 norbjd
+
+      This program is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, version 3 of the License.
+
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  paths:
+    - '**/*.go'
+dependency:
+  files:
+    - go.mod
+  licenses:
+    - name: gopkg.in/check.v1
+      version: v1.0.0-20201130134442-10cb98267c6c
+      license: BSD-2-Clause # see https://github.com/go-check/check/blob/10cb98267c6c/LICENSE
